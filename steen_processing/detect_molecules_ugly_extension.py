@@ -202,14 +202,14 @@ def main():
 
 
     # Specify the trajectory file
-    traj_file = '/home/scratch3/matnis/md_run.traj' # <------------------------------ Change this path to your .traj file
+    traj_file = 'TEMP' # <------------------------------ Change this path to your .traj file
     traj = Trajectory(traj_file)[XXX:YYY]
 
 
     # Specify the file where components are saved and loaded
     # from. Mind that if this file exists the results will be loaded
     # from it so no new detection takes place.
-    components_file = 'md_run_urea_1_5_to_1' #<-------------------------- Change the name of your output file. Important that the format is .npz!
+    components_file = 'TEMP' #<-------------------------- Change the name of your output file. Important that the format is .npz!
     
     components_file += '_INDEX_' + str(N) + '.npz'
 
