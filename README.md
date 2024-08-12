@@ -26,3 +26,5 @@ How to load the data:
 from combiner import load_and_combine_data
 frame = load_and_combine_data()
 ```
+
+This loads the 'components' part of steens data processing as an np.array
