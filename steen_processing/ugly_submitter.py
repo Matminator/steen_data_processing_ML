@@ -1,6 +1,3 @@
-"""
-Instructions...
-"""
 
 # --- Inpus -------------
 num_divides = 800
