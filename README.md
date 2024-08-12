@@ -15,6 +15,8 @@ input_traj_name = '../md_run.traj'
 # -----------------------
 ```
 
+Go to steen_data_processing_ML/steen_processing/detect_molecules_ugly_extension.py and give the path to your MD-data ('traj_file'). The bottom 'components_file'-name is in principle optional now.
+```
 # Specify the trajectory file
 traj_file = 'TEMP' # <------------------------------ Change this path to your .traj file
 traj = Trajectory(traj_file)[XXX:YYY]
@@ -24,6 +26,7 @@ traj = Trajectory(traj_file)[XXX:YYY]
 # from. Mind that if this file exists the results will be loaded
 # from it so no new detection takes place.
 components_file = 'TEMP' #<-------------------------- Change the name of your output file. Important that the format is .npz!
+```
 
 Run the ugly_submitter.py script:
 ```
