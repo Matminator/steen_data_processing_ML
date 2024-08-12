@@ -19,6 +19,7 @@ Then run the ugly_submitter.py script i.e.:
 ml ASE
 python ugly_submitter.py
 ```
+This will submit #num_divides jobs to Nifelhime
 
 How to load the data:
 ```python
