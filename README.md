@@ -28,4 +28,4 @@ from combiner import load_and_combine_data
 frame = load_and_combine_data()
 ```
 
-his will load the 'components' part of Steen's data processing as a numpy array (np.array).
+This will load the 'components' part of Steen's data processing as a numpy array (np.array).
