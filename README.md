@@ -27,5 +27,8 @@ How to load the data:
 from combiner import load_and_combine_data
 frame = load_and_combine_data()
 ```
-
 This will load the 'components' part of Steen's data processing as a numpy array (np.array).
+
+NOTE: If you are not loading the data from the same location as the combiner.py file, you will need to provide the location of the steen_processing folder.
+
+
