@@ -1,5 +1,12 @@
 # steen_data_processing_ML
 
+## Instructions 
+
+clone the repository to where you whant to work with the data:
+```
+git clone https://github.com/Matminator/steen_data_processing_ML.git
+```
+
 Go to the file steen_processing/ugly_submitter.py and select the number of divides (800 should be fine) of the data and put the path to your data:
 ```python
 # --- Inpus -------------
