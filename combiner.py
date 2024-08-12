@@ -19,7 +19,7 @@ def get_sorted_filenames(folder_path):
             if 0 <= number <= 10000:
                 matching_files.append((number, filename))
             else:
-                'An error occurred'
+                '\n--- An CRITICAL ERROR occurred ---\n'
         
 
     # Sort the list of tuples by the number (XX)
@@ -30,20 +30,20 @@ def get_sorted_filenames(folder_path):
     return sorted_filenames
 
 
-folder_path = 'lottes_molecules'  # Replace with your folder path
-sorted_filenames = get_sorted_filenames(folder_path)
+def load_and_combine_data(folder_path = 'steen_processing'):
+    
+    sorted_filenames = get_sorted_filenames(folder_path)
 
-# loading data:
-all_data = []
-for i, filename in enumerate(sorted_filenames):
-    data =  np.load(folder_path + '/' + filename)
-    components = data['components']
-    all_data.append(components)
-    if i%30 == 0:
-        print(np.round(100 * i/len(sorted_filenames), 1), '% loaded', flush = True)
+    # loading data:
+    all_data = []
+    for i, filename in enumerate(sorted_filenames):
+        data =  np.load(folder_path + '/' + filename)
+        components = data['components']
+        all_data.append(components)
+        if i%30 == 0:
+            print(np.round(100 * i/len(sorted_filenames), 1), '% loaded', flush = True)
+    print('Data Loaded!')
 
-combined_components = np.vstack(all_data)
+    combined_components = np.vstack(all_data)
 
-print('starting saving, this takes a while...')
-np.save('combined_data.npy', combined_components)
-print('Data saved!')
+    return combined_components
