@@ -15,6 +15,16 @@ input_traj_name = '../md_run.traj'
 # -----------------------
 ```
 
+# Specify the trajectory file
+traj_file = 'TEMP' # <------------------------------ Change this path to your .traj file
+traj = Trajectory(traj_file)[XXX:YYY]
+
+
+# Specify the file where components are saved and loaded
+# from. Mind that if this file exists the results will be loaded
+# from it so no new detection takes place.
+components_file = 'TEMP' #<-------------------------- Change the name of your output file. Important that the format is .npz!
+
 Run the ugly_submitter.py script:
 ```
 ml ASE
