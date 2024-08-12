@@ -1,4 +1,10 @@
 # steen_data_processing_ML
 
 
-load_and_combine_data(folder_path = 'steen_processing')
+
+
+
+How to load the data:
+
+from combiner import load_and_combine_data
+frame = load_and_combine_data()
