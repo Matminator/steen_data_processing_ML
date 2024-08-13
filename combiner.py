@@ -42,7 +42,7 @@ def load_and_combine_data(folder_path = 'steen_processing'):
         all_data.append(components)
         if i%30 == 0:
             print(np.round(100 * i/len(sorted_filenames), 1), '% loaded', flush = True)
-    print('Data Loaded!')
+    print('Data Loaded!', flush = True)
 
     combined_components = np.vstack(all_data)
 
