@@ -215,19 +215,19 @@ def main():
 
     cutoff_dict = {'Al': 1, 'Cl': 1.7, 'H': .37, 'O': 1, 'N': 1, 'C': 1}
     detect = Detect(traj, cutoff_dict, saved_components_file=components_file)
-    detect.print_initial_components()
-    detect.follow()
-    print('-' * 80)
-    for idx, reactions in detect.molecule_information.items():
-        print(idx, reactions)
-    print('-' * 80)
-    print('Closed reactions:')
-    for i in detect.closed_reactions:
-        print(i)
-    print('-' * 80)
-    print('Open reactions:')
-    for i in detect.open_reactions.items():
-        print(i)
+    # detect.print_initial_components()
+    # detect.follow()
+    # print('-' * 80)
+    # for idx, reactions in detect.molecule_information.items():
+    #     print(idx, reactions)
+    # print('-' * 80)
+    # print('Closed reactions:')
+    # for i in detect.closed_reactions:
+    #     print(i)
+    # print('-' * 80)
+    # print('Open reactions:')
+    # for i in detect.open_reactions.items():
+    #     print(i)
 
 if __name__ == "__main__":
     main()
