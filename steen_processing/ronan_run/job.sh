@@ -9,7 +9,7 @@
 
 module purge
 
-# ml Python
+ml Python
 
 module use /home/modules/energy/modules/all
 
