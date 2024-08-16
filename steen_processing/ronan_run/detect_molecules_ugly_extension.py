@@ -18,10 +18,13 @@ def get_memory_info():
     return psutil.virtual_memory().available * 100 / psutil.virtual_memory().total
 
 class Detect(object):
-    def __init__(self, traj, cutoff_dict,
+    def __init__(self, traj, cutoff_dict, start_index, end_index,
                  saved_components_file='components.npz'):
         atoms = traj[0]
+        self.start_index = start_index
+        self.end_index = end_index
         self.traj = [a for a in traj]
+        print('Read trajectory')
         self.atoms = atoms
         self.cutoffs = [cutoff_dict[s.symbol] for s in atoms]
         self.save_file = saved_components_file
@@ -67,7 +70,7 @@ class Detect(object):
     
     def parse_trajectory(self):
         with multiprocessing.Pool() as pool:        
-            for idx, ret in enumerate((pool.imap(self.get_component_list, self.traj, chunksize=100))):
+            for idx, ret in enumerate((pool.imap(self.get_component_list, self.traj))):
                 self.insert_data(ret)
                 avail_mem = get_memory_info()
                 if idx % 100 == 0:
@@ -81,9 +84,10 @@ class Detect(object):
                     with open('job.sh', 'r') as file:
                         red_file = file.read()
                         red_file = red_file.replace('-NNN-', str(os.environ['com_id']))
-                        red_file = red_file.replace('-START_INDEX-', str(max_id + 1))
-                        red_file = red_file.replace('-END_INDEX-', str('-1'))
-                        red_file = red_file.replace('-TRAJ-', str(self.traj))
+                        red_file = red_file.replace('-START_INDEX-', str(int(max_id) + 1))
+                        red_file = red_file.replace('-END_INDEX-', str(self.end_index))
+                        red_file = red_file.replace('-TRACKING_INDEX-', str(self.end_index))
+                        red_file = red_file.replace('-TRAJ-', str([os.environ['traj_name']]))
                         with open(f'TEMP_v2_job_file_{str(os.environ["com_id"])}.sh', 'w') as file:
                             file.write(red_file)
                     os.system('sbatch ' + f'TEMP_v2_job_file_{str(os.environ["com_id"])}.sh')
@@ -132,9 +136,6 @@ def main():
     N = args.N
     XXX = args.start_index
     YYY = args.end_index
-
-    print('Entering main function...', flush=True)
-
     traj_file = os.environ['traj_name']
     traj = Trajectory(traj_file)[XXX:YYY]
 
@@ -145,7 +146,7 @@ def main():
     components_file = f'concentrations_INDEX_{N}'
 
     cutoff_dict = {'Al': 1, 'Cl': 1.7, 'H': .37, 'O': 1, 'N': 1, 'C': 1}
-    Detect(traj, cutoff_dict, saved_components_file=components_file)
+    Detect(traj, cutoff_dict, XXX, YYY, saved_components_file=components_file)
 
 if __name__ == "__main__":
     main()
