@@ -9,7 +9,7 @@ import os
 import math
 from ase.io import Trajectory
 
-traj = Trajectory(input_traj_name)
+traj = Trajectory(input_traj_name)[:250000]
 len_traj = len(traj)
 # os.environ['output_file'] = output_filename
 os.environ['traj_name'] = input_traj_name
@@ -44,6 +44,7 @@ for com_id in range(num_divides):
         red_file = red_file.replace('-NNN-', str(com_id))
         red_file = red_file.replace('-START_INDEX-', str(start_index))
         red_file = red_file.replace('-END_INDEX-', str(end_index))
+        red_file = red_file.replace('-OFFSET_INDEX-', str(start_index))
         red_file = red_file.replace('-TRAJ-', input_traj_name)
         
         job_name = 'job_' + str(com_id) + '.sh'

@@ -4,7 +4,7 @@
 #SBATCH -e ./slurm-%j.err
 #SBATCH -N 1
 #SBATCH -n 24
-#SBATCH -p xeon24el8
+#SBATCH -p xeon24el8_test
 #SBATCH -t 0-00:30:00
 
 module purge
@@ -13,4 +13,4 @@ module purge
 
 module use /home/modules/energy/modules/all
 
-python detect_molecules_ugly_extension.py --N -NNN- --start_index -START_INDEX- --end_index -END_INDEX-
+python detect_molecules_ugly_extension.py --N -NNN- --start_index -START_INDEX- --end_index -END_INDEX- --offset_index -OFFSET_INDEX-
