@@ -80,10 +80,10 @@ class Detect(object):
                     print('Memory is full. Starting loop again...', flush=True)
                     with open('job.sh', 'r') as file:
                         red_file = file.read()
-                        red_file = red_file.replace('-START_INDEX-', str(max_id))
                         red_file = red_file.replace('-NNN-', str(os.environ['com_id']))
+                        red_file = red_file.replace('-START_INDEX-', str(max_id + 1))
                         red_file = red_file.replace('-END_INDEX-', str('-1'))
-                        red_file = red_file.replace('-TRAJ-', str([os.environ['traj_name']]))
+                        red_file = red_file.replace('-TRAJ-', str(self.traj))
                         with open(f'TEMP_v2_job_file_{str(os.environ["com_id"])}.sh', 'w') as file:
                             file.write(red_file)
                     os.system('sbatch ' + f'TEMP_v2_job_file_{str(os.environ["com_id"])}.sh')
