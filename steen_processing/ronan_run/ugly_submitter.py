@@ -1,6 +1,6 @@
 
 # --- Inpus -------------
-num_divides = 1
+num_divides = 25
 input_traj_name = '/home/scratch3/rogle/first_alcl3_acetamidine_1_5.traj' # <------------------------------------------------------------------- CHANGE THIS
 # -----------------------
 
@@ -9,7 +9,7 @@ import os
 import math
 from ase.io import Trajectory
 
-traj = Trajectory(input_traj_name)[:250000]
+traj = Trajectory(input_traj_name)
 len_traj = len(traj)
 # os.environ['output_file'] = output_filename
 os.environ['traj_name'] = input_traj_name

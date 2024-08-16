@@ -24,7 +24,7 @@ class Detect(object):
         self.offset = offset
         self.end_index = end_index
         self.traj = [a for a in traj]
-        print('Read trajectory')
+        print(f'Read trajectory with {get_memory_info()}% memory available')
         self.atoms = atoms
         self.cutoffs = [cutoff_dict[s.symbol] for s in atoms]
         self.save_file = saved_components_file
@@ -70,11 +70,11 @@ class Detect(object):
     
     def parse_trajectory(self):
         with multiprocessing.Pool() as pool:        
-            for idx, ret in enumerate((pool.imap(self.get_component_list, self.traj, chunksize=300))):
+            for idx, ret in enumerate((pool.imap(self.get_component_list, self.traj, chunksize=200))):
                 self.insert_data(ret)
                 avail_mem = get_memory_info()
-                # if idx % 100 == 0:
-                print(f'Available memory: {avail_mem}', flush=True)
+                if idx % 50 == 0:
+                    print(f'Available memory: {avail_mem}', flush=True)
                 if avail_mem < 20:
                     conn = sqlite3.connect(f'{self.save_file}.db')
                     cursor = conn.cursor()

@@ -4,7 +4,7 @@
 #SBATCH -e ./slurm-%j.err
 #SBATCH -N 1
 #SBATCH -n 24
-#SBATCH -p xeon24el8_test
+#SBATCH -p xeon24el8
 #SBATCH -t 0-00:30:00
 
 module purge
