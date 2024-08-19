@@ -8,8 +8,8 @@ from ase.io import Trajectory
 from collections import Counter
 import json
 import os
-import gc
 
+from concurrent import futures
 import argparse
 import sqlite3
 import psutil
@@ -19,13 +19,10 @@ def get_memory_info():
     return psutil.virtual_memory().available * 100 / psutil.virtual_memory().total
 
 class Detect(object):
-    def __init__(self, traj, cutoff_dict, offset, end_index,
+    def __init__(self, traj, cutoff_dict,
                  saved_components_file='components.npz'):
         atoms = traj[0]
-        self.offset = offset
-        self.end_index = end_index
-        self.traj = [a for a in traj]
-        print(f'Read trajectory with {get_memory_info()}% memory available', flush=True)
+        self.traj = traj
         self.atoms = atoms
         self.cutoffs = [cutoff_dict[s.symbol] for s in atoms]
         self.save_file = saved_components_file
@@ -70,48 +67,19 @@ class Detect(object):
         conn.close()       
     
     def parse_trajectory(self):
-        chunk_size = 100  # Or any appropriate value
-        total_items = len(self.traj)  # Total number of items in `self.traj`
-
-        # Break into smaller chunks
+        chunk_size = 1000
+        total_items = len(self.traj)
+        print(f'Read trajectory with {get_memory_info()}% memory available')
         for start_idx in range(0, total_items, chunk_size):
             end_idx = min(start_idx + chunk_size, total_items)
-            print(end_idx)
             # Define a new pool for every chunk
-            with multiprocessing.Pool() as pool:
-                # Slice the `self.traj` list into a smaller chunk
-                traj_chunk = self.traj[start_idx:end_idx]
-    
-                for idx, ret in enumerate(pool.imap(self.get_component_list, traj_chunk, chunksize=300)):
+            with futures.ThreadPoolExecutor() as executor:
+                traj = [a for a in self.traj[start_idx:end_idx]]
+                for idx, ret in enumerate(executor.map(self.get_component_list, traj, chunksize=200)):
                     self.insert_data(ret)
-
                     # Check memory usage and optionally restart the loop if needed
-                    print(idx)
                     avail_mem = get_memory_info()
                     print(f"Memory available after processing index {idx}: {avail_mem}", flush=True)
-                    # del traj_chunk
-                    # gc.collect()     
-
-        # print("Pool closed and memory cleared.")
-        #         if idx % 50 == 0:
-        #             print(f'Available memory: {avail_mem}', flush=True)
-        #         if avail_mem < 20:
-        #             conn = sqlite3.connect(f'{self.save_file}.db')
-        #             cursor = conn.cursor()
-        #             cursor.execute('SELECT MAX(id) FROM chemical_data')
-        #             max_id = cursor.fetchone()[0]
-        #             print('Memory is full. Starting loop again...', flush=True)
-        #             with open('job.sh', 'r') as file:
-        #                 red_file = file.read()
-        #                 red_file = red_file.replace('-NNN-', str(os.environ['com_id']))
-        #                 red_file = red_file.replace('-START_INDEX-', str(int(max_id) + self.offset + 1))
-        #                 red_file = red_file.replace('-END_INDEX-', str(self.end_index))
-        #                 red_file = red_file.replace('-OFFSET_INDEX-', str(self.offset))
-        #                 red_file = red_file.replace('-TRAJ-', str([os.environ['traj_name']]))
-        #                 with open(f'TEMP_v2_job_file_{str(os.environ["com_id"])}.sh', 'w') as file:
-        #                     file.write(red_file)
-        #             os.system('sbatch ' + f'TEMP_v2_job_file_{str(os.environ["com_id"])}.sh')
-        #             exit()
  
     def get_formula(self, fragment):
         return self.atoms[fragment].get_chemical_formula()
@@ -145,8 +113,8 @@ def main():
     # Create the parser
     parser = argparse.ArgumentParser(description="A script that takes command-line arguments")
 
-    print('Entered main function', flush=True)
-    # # Add arguments
+    # print('Entered main function')
+    # # # Add arguments
     parser.add_argument('--N', type=str, required=True)
     parser.add_argument('--start_index', type=int,  required=True)
     parser.add_argument('--end_index', type=int, required=True)
@@ -158,22 +126,19 @@ def main():
     N = args.N
     XXX = args.start_index
     YYY = args.end_index
-    offset = args.offset_index
     traj_file = os.environ['traj_name']
+    output_filename = os.environ['output_file']
     traj = Trajectory(traj_file)[XXX:YYY]
-    # input_traj_name = '/home/scratch3/rogle/first_alcl3_acetamidine_1_5.traj' # <------------------------------------------------------------------- CHANGE THIS
-
-    # traj = Trajectory(input_traj_name)[:20000]
 
     # Specify the file where components are saved and loaded
     # from. Mind that if this file exists the results will be loaded
     # from it so no new detection takes place.
     
-    # components_file = f'concentrations_INDEX_{N}'
-    components_file = 'ronan'
-    
+    components_file = f'concentrations_INDEX_{N}'
+
     cutoff_dict = {'Al': 1, 'Cl': 1.7, 'H': .37, 'O': 1, 'N': 1, 'C': 1}
-    Detect(traj, cutoff_dict, 0, 0, saved_components_file=components_file)
+    # components_file = 'component'
+    Detect(traj, cutoff_dict, saved_components_file=components_file)
 
 if __name__ == "__main__":
     main()
