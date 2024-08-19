@@ -67,7 +67,7 @@ class Detect(object):
         conn.close()       
     
     def parse_trajectory(self):
-        chunk_size = 20000
+        chunk_size = 5000
         total_items = len(self.traj)
         print(f'Read trajectory with {get_memory_info()}% memory available')
         for start_idx in range(0, total_items, chunk_size):
