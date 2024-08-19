@@ -5,11 +5,11 @@
 #SBATCH -N 1
 #SBATCH -n 24
 #SBATCH -p xeon24el8
-#SBATCH -t 0-00:30:00
+#SBATCH -t 2-00:00:00
 
 module purge
 
-ml Python
+# ml Python
 
 module use /home/modules/energy/modules/all
 
