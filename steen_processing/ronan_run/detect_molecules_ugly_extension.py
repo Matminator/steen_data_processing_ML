@@ -12,7 +12,11 @@ import os
 from concurrent import futures
 import argparse
 import sqlite3
-import psutil
+
+try:
+    import psutil
+except:
+    os.system('pip install psutil')
 
 
 def get_memory_info():
@@ -126,12 +130,13 @@ def main():
     YYY = args.end_index
     traj_file = os.environ['traj_name']
     traj = Trajectory(traj_file)[XXX:YYY]
+    output_file = os.environ['output_file']
 
     # Specify the file where components are saved and loaded
     # from. Mind that if this file exists the results will be loaded
     # from it so no new detection takes place.
     
-    components_file = f'concentrations_INDEX_{N}'
+    components_file = f'{output_file}_concentrations_INDEX_{N}'
 
     cutoff_dict = {'Al': 1, 'Cl': 1.7, 'H': .37, 'O': 1, 'N': 1, 'C': 1}
     # components_file = 'component'
