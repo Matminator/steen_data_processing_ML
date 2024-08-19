@@ -72,12 +72,10 @@ class Detect(object):
         print(f'Read trajectory with {get_memory_info()}% memory available')
         for start_idx in range(0, total_items, chunk_size):
             end_idx = min(start_idx + chunk_size, total_items)
-            # Define a new pool for every chunk
             with futures.ThreadPoolExecutor() as executor:
                 traj = [a for a in self.traj[start_idx:end_idx]]
                 for idx, ret in enumerate(executor.map(self.get_component_list, traj, chunksize=200)):
                     self.insert_data(ret)
-                    # Check memory usage and optionally restart the loop if needed
                     avail_mem = get_memory_info()
                     print(f"Memory available after processing index {idx}: {avail_mem}", flush=True)
  
