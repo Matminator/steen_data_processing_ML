@@ -127,7 +127,6 @@ def main():
     XXX = args.start_index
     YYY = args.end_index
     traj_file = os.environ['traj_name']
-    output_filename = os.environ['output_file']
     traj = Trajectory(traj_file)[XXX:YYY]
 
     # Specify the file where components are saved and loaded
