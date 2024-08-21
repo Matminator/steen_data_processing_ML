@@ -71,17 +71,19 @@ class Detect(object):
         conn.close()       
     
     def parse_trajectory(self):
-        chunk_size = 5000
+        chunk_size = 10000
         total_items = len(self.traj)
         print(f'Read trajectory with {get_memory_info()}% memory available')
         for start_idx in range(0, total_items, chunk_size):
             end_idx = min(start_idx + chunk_size, total_items)
-            with futures.ThreadPoolExecutor() as executor:
-                traj = [a for a in self.traj[start_idx:end_idx]]
-                for idx, ret in enumerate(executor.map(self.get_component_list, traj, chunksize=200)):
-                    self.insert_data(ret)
-                    avail_mem = get_memory_info()
-                    print(f"Memory available after processing index {idx}: {avail_mem}", flush=True)
+            # with futures.ThreadPoolExecutor() as executor:
+            #     traj = [a for a in self.traj[start_idx:end_idx]]
+            #     for idx, ret in enumerate(executor.map(self.get_component_list, traj)):
+            for idx in range(start_idx, end_idx):
+                ret = self.get_component_list(self.traj[idx])
+                self.insert_data(ret)
+                avail_mem = get_memory_info()
+                print(f"Memory available after processing index {idx}: {avail_mem}", flush=True)
  
     def get_formula(self, fragment):
         return self.atoms[fragment].get_chemical_formula()

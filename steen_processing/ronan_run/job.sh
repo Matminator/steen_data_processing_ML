@@ -3,9 +3,9 @@
 #SBATCH --mail-type None
 #SBATCH -e ./slurm-%j.err
 #SBATCH -N 1
-#SBATCH -n 24
+#SBATCH -n 1
 #SBATCH -p xeon24el8
-#SBATCH -t 2-00:00:00
+#SBATCH --time=06:00:00
 
 module purge
 
