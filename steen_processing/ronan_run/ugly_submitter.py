@@ -2,7 +2,7 @@
 # --- Inpus -------------
 num_divides = 20
 input_traj_name = '/home/scratch3/rogle/first_alcl3_acetamidine_1_5.traj' # <------------------------------------------------------------------- CHANGE THIS
-outp= 'first'
+output_filename= 'first'
 # -----------------------
 
 # *** Imports: ***
@@ -12,7 +12,7 @@ from ase.io import Trajectory
 
 traj = Trajectory(input_traj_name)
 len_traj = len(traj)
-# os.environ['output_file'] = output_filename
+os.environ['output_file'] = output_filename
 os.environ['traj_name'] = input_traj_name
 
 batch_size = math.ceil(len_traj / num_divides)
