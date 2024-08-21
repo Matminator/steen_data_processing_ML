@@ -10,7 +10,7 @@ import os
 import math
 from ase.io import Trajectory
 
-traj = Trajectory(input_traj_name)[:400000]
+traj = Trajectory(input_traj_name)
 len_traj = len(traj)
 # os.environ['output_file'] = output_filename
 os.environ['traj_name'] = input_traj_name
